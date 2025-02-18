@@ -8,12 +8,13 @@ public class Main {
     Scanner sc = new Scanner(System.in);
 
     int lastArticleId = 0;
+    Article lastArticle = null;
 
     while (true) {
       System.out.print("명령) ");
       String cmd = sc.nextLine();
 
-      if(cmd.equals("/usr/article/write")) {
+      if (cmd.equals("/usr/article/write")) {
         System.out.println("== 게시물 작성 ==");
 
         System.out.print("제목 : ");
@@ -25,15 +26,26 @@ public class Main {
         int id = ++lastArticleId;
 
         Article article = new Article(id, subject, content);
+        lastArticle = article;
 
         System.out.println("생성 된 게시물 객체 : " + article);
         System.out.printf("%d번 게시물이 등록되었습니다.\n", article.id);
-      }
-      else if(cmd.equals("exit")) {
+      } else if (cmd.equals("/usr/article/detail")) {
+        Article article = lastArticle;
+
+        if(article == null) {
+          System.out.println("게시물이 존재하지 않습니다.");
+          continue;
+        }
+
+        System.out.println("== 게시물 상세보기 ==");
+        System.out.printf("번호 : %d\n", article.id);
+        System.out.printf("제목 : %s\n", article.subject);
+        System.out.printf("내용 : %s\n", article.content);
+      } else if (cmd.equals("exit")) {
         System.out.println("프로그램을 종료합니다.");
         break;
-      }
-      else {
+      } else {
         System.out.println("잘못 된 명령어입니다.");
       }
     }
