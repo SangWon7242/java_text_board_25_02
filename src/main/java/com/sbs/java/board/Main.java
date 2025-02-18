@@ -16,11 +16,10 @@ public class Main {
     Scanner sc = new Scanner(System.in);
 
     List<Article> articles = new ArrayList<>();
-
-    int lastArticleId = 0;
-    Article lastArticle = null;
-
     makeArticleTestData(articles);
+
+    int lastArticleId = articles.get(articles.size() - 1).id;
+    Article lastArticle = null;
 
     while (true) {
       System.out.print("명령) ");
