@@ -5,6 +5,12 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Main {
+  static void makeArticleTestData(List<Article> articles) {
+    articles.add(new Article(1, "제목1", "내용1"));
+    articles.add(new Article(2, "제목2", "내용2"));
+    articles.add(new Article(3, "제목3", "내용3"));
+  }
+
   public static void main(String[] args) {
     System.out.println("== 자바 텍스트 게시판 시작 ==");
     Scanner sc = new Scanner(System.in);
@@ -13,6 +19,8 @@ public class Main {
 
     int lastArticleId = 0;
     Article lastArticle = null;
+
+    makeArticleTestData(articles);
 
     while (true) {
       System.out.print("명령) ");
