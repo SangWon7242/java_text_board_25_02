@@ -3,27 +3,32 @@ import java.util.*;
 public class AppTest {
   public static void main(String[] args) {
     // 파라미터 분석
-    String queryString1 = "id=1&subject=제목1&content=내용1&writerName=김철수&boardId=1";
-    Map<String, String> params1 = Util.getParams(queryString1);
+    String queryString = "/usr/article/write?id=1&subject=제목1&content=10+5=13&writerName=김철수&boardId=1";
+    Map<String, String> params = Util.getParamsFromUrl(queryString);
+    System.out.println(params);
 
-    System.out.println(params1);
-
-    String queryString2 = "id=2&subject=제목2&content=내용2&writerName=신유리&boardId=2";
-    Map<String, String> params2 = Util.getParams(queryString2);
-
-    System.out.println(params2);
-
+    System.out.println(params.get("id")); // 1
+    System.out.println(params.get("subject")); // 제목1
+    System.out.println(params.get("content")); // 10+5=13
+    System.out.println(params.get("writerName")); // 김철수
   }
 }
 
 class Util {
-  static Map<String, String> getParams(String queryStr) {
-    Map<String, String> params = new LinkedHashMap<>();
+  static Map<String, String> getParamsFromUrl(String url) {
+    Map<String, String> params = new HashMap<>();
+    String[] urlBits = url.split("\\?", 2);
 
-    String[] queryStrBits = queryStr.split("&");
+    if(urlBits.length == 1) return params;
 
-    for(String bit : queryStrBits) {
-      String[] bitBits = bit.split("=");
+    String queryStr = urlBits[1];
+
+    for(String bit : queryStr.split("&")) {
+      String[] bitBits = bit.split("=", 2);
+
+      if(bitBits.length == 1) {
+        continue;
+      }
 
       params.put(bitBits[0], bitBits[1]);
     }
