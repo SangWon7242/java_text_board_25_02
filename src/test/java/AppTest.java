@@ -1,6 +1,4 @@
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class AppTest {
   public static void main(String[] args) {
@@ -9,31 +7,25 @@ public class AppTest {
 
     String[] queryStringBits = queryString.split("&");
 
-    System.out.println(Arrays.toString(queryStringBits));
-
-    List<String> paramsName = new ArrayList<>();
-    List<String> paramsValue = new ArrayList<>();
+    // Map<String, String> params = new HashMap<>();
+    Map<String, String> params = new LinkedHashMap<>();
 
     for(String bit : queryStringBits) {
       String[] bitBits = bit.split("=");
 
-      paramsName.add(bitBits[0]);
-      paramsValue.add(bitBits[1]);
+      params.put(bitBits[0], bitBits[1]);
     }
 
-    /*
-    for(int i = 0; i < paramsName.size(); i++) {
-      String paramName = paramsName.get(i);
-      String paramValue = paramsValue.get(i);
+    System.out.println(params);
 
-      System.out.printf("%s : %s\n", paramName, paramValue);
-    }
-    */
-    System.out.println(paramsName);
-    System.out.println(paramsValue);
+    System.out.println("== 원하는 것만 하나하나 가져와 출력 ==");
+    System.out.printf("id : %d\n", Integer.parseInt(params.get("id")));
+    System.out.printf("subject : %s\n", params.get("subject"));
+    System.out.printf("content : %s\n", params.get("content"));
+    System.out.printf("writerName : %s\n", params.get("writerName"));
+    System.out.printf("boardId : %d\n", Integer.parseInt(params.get("boardId")));
 
-    int findIndex = paramsName.indexOf("subject");
-    System.out.println(paramsValue.get(findIndex));
-    
+    System.out.println("== 반복문을 이용한 순회 ==");
+    params.forEach((key, value) -> System.out.printf("%s : %s\n", key, value));
   }
 }
