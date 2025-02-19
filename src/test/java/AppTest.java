@@ -3,29 +3,34 @@ import java.util.*;
 public class AppTest {
   public static void main(String[] args) {
     // 파라미터 분석
-    String queryString = "id=1&subject=제목1&content=내용1&writerName=김철수&boardId=1";
+    String queryString1 = "id=1&subject=제목1&content=내용1&writerName=김철수&boardId=1";
+    String[] queryString1Bits = queryString1.split("&");
 
-    String[] queryStringBits = queryString.split("&");
+    String queryString2 = "id=2&subject=제목2&content=내용2&writerName=신유리&boardId=2";
+    String[] queryString2Bits = queryString2.split("&");
 
     // Map<String, String> params = new HashMap<>();
-    Map<String, String> params = new LinkedHashMap<>();
+    Map<String, String> params1 = new LinkedHashMap<>();
 
-    for(String bit : queryStringBits) {
+    for(String bit : queryString1Bits) {
       String[] bitBits = bit.split("=");
 
-      params.put(bitBits[0], bitBits[1]);
+      params1.put(bitBits[0], bitBits[1]);
     }
 
-    System.out.println(params);
+    // Map<String, String> params = new HashMap<>();
+    Map<String, String> params2 = new LinkedHashMap<>();
 
-    System.out.println("== 원하는 것만 하나하나 가져와 출력 ==");
-    System.out.printf("id : %d\n", Integer.parseInt(params.get("id")));
-    System.out.printf("subject : %s\n", params.get("subject"));
-    System.out.printf("content : %s\n", params.get("content"));
-    System.out.printf("writerName : %s\n", params.get("writerName"));
-    System.out.printf("boardId : %d\n", Integer.parseInt(params.get("boardId")));
+    for(String bit : queryString2Bits) {
+      String[] bitBits = bit.split("=");
+
+      params2.put(bitBits[0], bitBits[1]);
+    }
 
     System.out.println("== 반복문을 이용한 순회 ==");
-    params.forEach((key, value) -> System.out.printf("%s : %s\n", key, value));
+    params1.forEach((key, value) -> System.out.printf("%s : %s\n", key, value));
+
+    System.out.println("== 반복문을 이용한 순회 ==");
+    params2.forEach((key, value) -> System.out.printf("%s : %s\n", key, value));
   }
 }
