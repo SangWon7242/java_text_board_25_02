@@ -1,8 +1,6 @@
 package com.sbs.java.board;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
   static void makeArticleTestData(List<Article> articles) {
@@ -24,7 +22,9 @@ public class Main {
       System.out.print("명령) ");
       String cmd = sc.nextLine();
 
-      if (cmd.equals("/usr/article/write")) {
+      Rq rq = new Rq(cmd);
+
+      if (rq.getUrlPath().equals("/usr/article/write")) {
         System.out.println("== 게시물 작성 ==");
 
         System.out.print("제목 : ");
@@ -41,42 +41,21 @@ public class Main {
 
         System.out.println("생성 된 게시물 객체 : " + article);
         System.out.printf("%d번 게시물이 등록되었습니다.\n", article.id);
-      } else if (cmd.equals("/usr/article/list")) {
-        // articles.isEmpty()
-        // 리스트 안에 데이터가 존재하지 않으면 true
-        // 존재하면 false
+      } else if (rq.getUrlPath().equals("/usr/article/list")) {
+
         if(articles.isEmpty()) {
           System.out.println("현재 게시물이 존재하지 않습니다.");
           continue;
         }
 
         System.out.println("번호 | 제목");
-        /*
-        // v1
-        for(int i = 0; i < articles.size(); i++) {
-          Article article = articles.get(i);
-          System.out.printf("%d | %s\n", article.id, article.subject);
-        }
-        */
-
-        // v2 : 향상된 for문
-        /*
-        for(Article article : articles) {
-          System.out.printf("%d | %s\n", article.id, article.subject);
-        }
-        */
-
-        // v3
-        // articles.forEach(article -> System.out.printf("%d | %s\n", article.id, article.subject));
-
-        // v4 : 역순 출력
         for(int i = articles.size() - 1; i >= 0; i--) {
           Article article = articles.get(i);
           System.out.printf("%d | %s\n", article.id, article.subject);
         }
 
 
-      } else if (cmd.equals("/usr/article/detail")) {
+      } else if (rq.getUrlPath().equals("/usr/article/detail")) {
         if(articles.isEmpty()) {
           System.out.println("현재 게시물이 존재하지 않습니다.");
           continue;
@@ -93,7 +72,7 @@ public class Main {
         System.out.printf("번호 : %d\n", article.id);
         System.out.printf("제목 : %s\n", article.subject);
         System.out.printf("내용 : %s\n", article.content);
-      } else if (cmd.equals("exit")) {
+      } else if (rq.getUrlPath().equals("exit")) {
         System.out.println("프로그램을 종료합니다.");
         break;
       } else {
@@ -120,5 +99,52 @@ class Article {
   @Override
   public String toString() {
     return "{id: %d, subject: \"%s\", content: \"%s\"}".formatted(id, subject, content);
+  }
+}
+
+class Rq {
+  String url;
+  Map<String, String> params;
+  String urlPath;
+
+  Rq(String url) {
+    this.url = url;
+    params = Util.getParamsFromUrl(this.url);
+    urlPath = Util.getPathFromUrl(this.url);
+  }
+
+  Map<String, String> getParams() {
+    return params;
+  }
+
+  String getUrlPath() {
+    return urlPath;
+  }
+}
+
+class Util {
+  static Map<String, String> getParamsFromUrl(String url) {
+    Map<String, String> params = new HashMap<>();
+    String[] urlBits = url.split("\\?", 2);
+
+    if(urlBits.length == 1) return params;
+
+    String queryStr = urlBits[1];
+
+    for(String bit : queryStr.split("&")) {
+      String[] bitBits = bit.split("=", 2);
+
+      if(bitBits.length == 1) {
+        continue;
+      }
+
+      params.put(bitBits[0], bitBits[1]);
+    }
+
+    return params;
+  }
+
+  static String getPathFromUrl(String url) {
+    return url.split("\\?", 2)[0];
   }
 }
