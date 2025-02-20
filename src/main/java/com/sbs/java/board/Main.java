@@ -39,31 +39,45 @@ public class Main {
 
         articles.add(article);
 
-        System.out.println("생성 된 게시물 객체 : " + article);
         System.out.printf("%d번 게시물이 등록되었습니다.\n", article.id);
       } else if (rq.getUrlPath().equals("/usr/article/list")) {
+        Map<String, String> params = rq.getParams();
 
-        if(articles.isEmpty()) {
+        if (articles.isEmpty()) {
           System.out.println("현재 게시물이 존재하지 않습니다.");
           continue;
         }
 
-        System.out.println("번호 | 제목");
-        for(int i = articles.size() - 1; i >= 0; i--) {
-          Article article = articles.get(i);
-          System.out.printf("%d | %s\n", article.id, article.subject);
+
+        boolean orderByIdDesc = true;
+        if (params.containsKey("orderBy") && params.get("orderBy").equals("idAsc")) {
+          orderByIdDesc = false;
         }
 
+        System.out.println("== 게시물 리스트 ==");
+        System.out.println("번호 | 제목");
+        
+        // orderByIdDesc : true면 내림차순 정렬, 그렇지 않으면 오름차순 정렬
+        if (orderByIdDesc) {
+          for (int i = articles.size() - 1; i >= 0; i--) {
+            Article article = articles.get(i);
+            System.out.printf("%d | %s\n", article.id, article.subject);
+          }
+        } else {
+          articles.forEach(
+              article -> System.out.printf("%d | %s\n", article.id, article.subject)
+          );
+        }
 
       } else if (rq.getUrlPath().equals("/usr/article/detail")) {
-        if(articles.isEmpty()) {
+        if (articles.isEmpty()) {
           System.out.println("현재 게시물이 존재하지 않습니다.");
           continue;
         }
 
         Map<String, String> params = rq.getParams();
 
-        if(!params.containsKey("id")) {
+        if (!params.containsKey("id")) {
           System.out.println("id 값을 입력해주세요.");
           continue;
         }
@@ -77,7 +91,7 @@ public class Main {
           continue;
         }
 
-        if(id > articles.size()) {
+        if (id > articles.size()) {
           System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
           continue;
         }
@@ -143,14 +157,14 @@ class Util {
     Map<String, String> params = new HashMap<>();
     String[] urlBits = url.split("\\?", 2);
 
-    if(urlBits.length == 1) return params;
+    if (urlBits.length == 1) return params;
 
     String queryStr = urlBits[1];
 
-    for(String bit : queryStr.split("&")) {
+    for (String bit : queryStr.split("&")) {
       String[] bitBits = bit.split("=", 2);
 
-      if(bitBits.length == 1) {
+      if (bitBits.length == 1) {
         continue;
       }
 
