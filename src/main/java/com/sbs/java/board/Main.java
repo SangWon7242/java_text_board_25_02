@@ -39,6 +39,8 @@ public class Main {
         actionUsrArticleDetail(rq, articles);
       } else if (rq.getUrlPath().equals("/usr/article/modify")) {
         actionUsrArticleModify(sc, rq, articles);
+      } else if (rq.getUrlPath().equals("/usr/article/delete")) {
+        actionUsrArticleDelete(rq, articles);
       } else if (rq.getUrlPath().equals("exit")) {
         System.out.println("프로그램을 종료합니다.");
         break;
@@ -49,6 +51,40 @@ public class Main {
 
     System.out.println("== 자바 텍스트 게시판 끝 ==");
     sc.close();
+  }
+
+  private static void actionUsrArticleDelete(Rq rq, List<Article> articles) {
+    if (articles.isEmpty()) {
+      System.out.println("현재 게시물이 존재하지 않습니다.");
+      return;
+    }
+
+    Map<String, String> params = rq.getParams();
+
+    if (!params.containsKey("id")) {
+      System.out.println("id 값을 입력해주세요.");
+      return;
+    }
+
+    int id = 0;
+
+    try {
+      id = Integer.parseInt(params.get("id"));
+    } catch (NumberFormatException e) {
+      System.out.println("id를 정수형태로 입력해주세요.");
+      return;
+    }
+
+    Article article = findById(articles, id);
+
+    if(article == null) {
+      System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
+      return;
+    }
+
+    articles.remove(article);
+
+    System.out.printf("%d번 게시물이 삭제되었습니다.\n", id);
   }
 
   private static void actionUsrArticleModify(Scanner sc, Rq rq, List<Article> articles) {
@@ -73,12 +109,12 @@ public class Main {
       return;
     }
 
-    if (id > articles.size()) {
+    Article article = findById(articles, id);
+
+    if(article == null) {
       System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
       return;
     }
-
-    Article article = articles.get(id - 1);
 
     System.out.printf("== %d번 게시물 수정 ==\n", article.id);
     System.out.print("제목 : ");
@@ -130,12 +166,12 @@ public class Main {
       return;
     }
 
-    if (id > articles.size()) {
+    Article article = findById(articles, id);
+
+    if(article == null) {
       System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
       return;
     }
-
-    Article article = articles.get(id - 1);
 
     System.out.println("== 게시물 상세보기 ==");
     System.out.printf("번호 : %d\n", article.id);
@@ -187,6 +223,13 @@ public class Main {
     sortedArticles.forEach(
         article -> System.out.printf("%d | %s\n", article.id, article.subject)
     );
+  }
+
+  private static Article findById(List<Article> articles, int id) {
+    return articles.stream()
+        .filter(article -> article.id == id)
+        .findFirst() // 찾은 것중에 처음 것을 리턴
+        .orElse(null); // 찾지 못했다면 null을 리턴
   }
 }
 
