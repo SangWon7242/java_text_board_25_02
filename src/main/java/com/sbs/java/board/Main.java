@@ -6,7 +6,7 @@ import java.util.stream.IntStream;
 public class Main {
   static void makeArticleTestData(List<Article> articles) {
     IntStream.rangeClosed(1, 100)
-            .forEach(i -> articles.add(new Article(i, "제목" + i, "내용" + i)));
+        .forEach(i -> articles.add(new Article(i, "제목" + i, "내용" + i)));
 
     /*
     for(int i = 1; i <= 100; i++) {
@@ -54,22 +54,39 @@ public class Main {
           continue;
         }
 
+        // 검색 기능 시작
+        List<Article> filteredArticles = articles;
 
+        if (params.containsKey("searchKeyword")) {
+          String searchKeyword = params.get("searchKeyword");
+
+          filteredArticles = new ArrayList<>();
+
+          articles.stream()
+              .filter(article
+                  -> article.subject.contains(searchKeyword) || article.content.contains(searchKeyword)
+              )
+              .forEach(filteredArticles::add); // article -> articles.add(article)
+        }
+
+        // 검색 기능 끝
+
+        // 정렬 로직 시작
         boolean orderByIdDesc = true;
         if (params.containsKey("orderBy") && params.get("orderBy").equals("idAsc")) {
           orderByIdDesc = false;
         }
 
-        System.out.println("== 게시물 리스트 ==");
-        System.out.println("번호 | 제목");
+        List<Article> sortedArticles = filteredArticles;
 
-        List<Article> sortedArticles = articles;
-        
         // orderByIdDesc : true면 내림차순 정렬, 그렇지 않으면 오름차순 정렬
         if (orderByIdDesc) {
           sortedArticles = Util.reverseList(sortedArticles);
         }
+        // 정렬 로직 끝
 
+        System.out.printf("== 게시물 리스트(%d개) ==\n", sortedArticles.size());
+        System.out.println("번호 | 제목");
         sortedArticles.forEach(
             article -> System.out.printf("%d | %s\n", article.id, article.subject)
         );
@@ -186,10 +203,10 @@ class Util {
   // 이 함수는 원본리스트를 훼손하지 않고, 새 리스트를 만든다.
   // 즉 정렬이 반대인 복사본리스트를 만들어서 반환한다.
   // <T> : 제너릭 타입 : 어떤 타임의 리스트든지 처리 가능
-  public static<T> List<T> reverseList(List<T> list) {
+  public static <T> List<T> reverseList(List<T> list) {
     List<T> reverse = new ArrayList<>(list.size());
 
-    for ( int i = list.size() - 1; i >= 0; i-- ) {
+    for (int i = list.size() - 1; i >= 0; i--) {
       reverse.add(list.get(i));
     }
 
