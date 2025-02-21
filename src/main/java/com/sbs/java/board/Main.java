@@ -56,18 +56,17 @@ public class Main {
 
         System.out.println("== 게시물 리스트 ==");
         System.out.println("번호 | 제목");
+
+        List<Article> sortedArticles = articles;
         
         // orderByIdDesc : true면 내림차순 정렬, 그렇지 않으면 오름차순 정렬
         if (orderByIdDesc) {
-          for (int i = articles.size() - 1; i >= 0; i--) {
-            Article article = articles.get(i);
-            System.out.printf("%d | %s\n", article.id, article.subject);
-          }
-        } else {
-          articles.forEach(
-              article -> System.out.printf("%d | %s\n", article.id, article.subject)
-          );
+          sortedArticles = Util.reverseList(sortedArticles);
         }
+
+        sortedArticles.forEach(
+            article -> System.out.printf("%d | %s\n", article.id, article.subject)
+        );
 
       } else if (rq.getUrlPath().equals("/usr/article/detail")) {
         if (articles.isEmpty()) {
@@ -176,5 +175,18 @@ class Util {
 
   static String getPathFromUrl(String url) {
     return url.split("\\?", 2)[0];
+  }
+
+  // 이 함수는 원본리스트를 훼손하지 않고, 새 리스트를 만든다.
+  // 즉 정렬이 반대인 복사본리스트를 만들어서 반환한다.
+  // <T> : 제너릭 타입 : 어떤 타임의 리스트든지 처리 가능
+  public static<T> List<T> reverseList(List<T> list) {
+    List<T> reverse = new ArrayList<>(list.size());
+
+    for ( int i = list.size() - 1; i >= 0; i-- ) {
+      reverse.add(list.get(i));
+    }
+
+    return reverse;
   }
 }
