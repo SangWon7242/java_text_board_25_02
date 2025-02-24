@@ -1,5 +1,7 @@
 package com.sbs.java.board;
 
+import com.sbs.java.board.container.Container;
+
 import java.util.*;
 import java.util.stream.IntStream;
 
@@ -14,24 +16,23 @@ public class Main {
 
   public static void main(String[] args) {
     System.out.println("== 자바 텍스트 게시판 시작 ==");
-    Scanner sc = new Scanner(System.in);
 
     makeArticleTestData();
 
     while (true) {
       System.out.print("명령) ");
-      String cmd = sc.nextLine();
+      String cmd = Container.sc.nextLine();
 
       Rq rq = new Rq(cmd);
 
       if (rq.getUrlPath().equals("/usr/article/write")) {
-        actionUsrArticleWrite(sc);
+        actionUsrArticleWrite();
       } else if (rq.getUrlPath().equals("/usr/article/list")) {
         actionUsrArticleList(rq);
       } else if (rq.getUrlPath().equals("/usr/article/detail")) {
         actionUsrArticleDetail(rq);
       } else if (rq.getUrlPath().equals("/usr/article/modify")) {
-        actionUsrArticleModify(sc, rq);
+        actionUsrArticleModify(rq);
       } else if (rq.getUrlPath().equals("/usr/article/delete")) {
         actionUsrArticleDelete(rq);
       } else if (rq.getUrlPath().equals("exit")) {
@@ -43,7 +44,7 @@ public class Main {
     }
 
     System.out.println("== 자바 텍스트 게시판 끝 ==");
-    sc.close();
+    Container.sc.close();
   }
 
   private static void actionUsrArticleDelete(Rq rq) {
@@ -80,7 +81,7 @@ public class Main {
     System.out.printf("%d번 게시물이 삭제되었습니다.\n", id);
   }
 
-  private static void actionUsrArticleModify(Scanner sc, Rq rq) {
+  private static void actionUsrArticleModify(Rq rq) {
     if (articles.isEmpty()) {
       System.out.println("현재 게시물이 존재하지 않습니다.");
       return;
@@ -111,24 +112,24 @@ public class Main {
 
     System.out.printf("== %d번 게시물 수정 ==\n", article.id);
     System.out.print("제목 : ");
-    article.subject = sc.nextLine();
+    article.subject = Container.sc.nextLine();
 
     System.out.print("내용 : ");
-    article.content = sc.nextLine();
+    article.content = Container.sc.nextLine();
 
     System.out.printf("%d번 게시물이 수정되었습니다.\n", article.id);
   }
 
-  static void actionUsrArticleWrite(Scanner sc) {
+  static void actionUsrArticleWrite() {
     lastArticleId = articles.get(articles.size() - 1).id;
 
     System.out.println("== 게시물 작성 ==");
 
     System.out.print("제목 : ");
-    String subject = sc.nextLine();
+    String subject = Container.sc.nextLine();
 
     System.out.print("내용 : ");
-    String content = sc.nextLine();
+    String content = Container.sc.nextLine();
 
     int id = ++lastArticleId;
 
