@@ -22,6 +22,26 @@ public class Rq {
   public String getUrlPath() {
     return urlPath;
   }
+
+  public int getIntParam(String paramName, int defaultValue) {
+    if (!params.containsKey(paramName)) return defaultValue;
+
+    int id = 0;
+
+    try {
+      id = Integer.parseInt(params.get(paramName));
+    } catch (NumberFormatException e) {
+      return defaultValue;
+    }
+
+    return id;
+  }
+
+  public String getParam(String paramName, String defaultValue) {
+    if (!params.containsKey(paramName)) return defaultValue;
+
+    return params.get(paramName);
+  }
 }
 
 

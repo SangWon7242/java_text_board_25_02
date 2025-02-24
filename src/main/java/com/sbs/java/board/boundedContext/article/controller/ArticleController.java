@@ -56,9 +56,9 @@ public class ArticleController {
 
     // 검색 기능 시작
     List<Article> filteredArticles = articles;
+    String searchKeyword = rq.getParam("searchKeyword", "");
 
-    if (params.containsKey("searchKeyword")) {
-      String searchKeyword = params.get("searchKeyword");
+    if (!searchKeyword.trim().isEmpty()) {
 
       filteredArticles = new ArrayList<>();
 
@@ -72,7 +72,9 @@ public class ArticleController {
     // 검색 기능 끝
 
     // 정렬 로직 시작
-    boolean orderByIdDesc = true;
+    String orderBy = rq.getParam("orderBy", "idDesc");
+    boolean orderByIdDesc = orderBy.equals("idDesc");
+
     if (params.containsKey("orderBy") && params.get("orderBy").equals("idAsc")) {
       orderByIdDesc = false;
     }
@@ -98,25 +100,16 @@ public class ArticleController {
       return;
     }
 
-    Map<String, String> params = rq.getParams();
+    int id = rq.getIntParam("id", 0);
 
-    if (!params.containsKey("id")) {
-      System.out.println("id 값을 입력해주세요.");
-      return;
-    }
-
-    int id = 0;
-
-    try {
-      id = Integer.parseInt(params.get("id"));
-    } catch (NumberFormatException e) {
-      System.out.println("id를 정수형태로 입력해주세요.");
+    if (id == 0) {
+      System.out.println("올바른 값을 입력해주세요.");
       return;
     }
 
     Article article = findById(id);
 
-    if(article == null) {
+    if (article == null) {
       System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
       return;
     }
@@ -133,25 +126,16 @@ public class ArticleController {
       return;
     }
 
-    Map<String, String> params = rq.getParams();
+    int id = rq.getIntParam("id", 0);
 
-    if (!params.containsKey("id")) {
-      System.out.println("id 값을 입력해주세요.");
-      return;
-    }
-
-    int id = 0;
-
-    try {
-      id = Integer.parseInt(params.get("id"));
-    } catch (NumberFormatException e) {
-      System.out.println("id를 정수형태로 입력해주세요.");
+    if (id == 0) {
+      System.out.println("올바른 값을 입력해주세요.");
       return;
     }
 
     Article article = findById(id);
 
-    if(article == null) {
+    if (article == null) {
       System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
       return;
     }
@@ -172,25 +156,16 @@ public class ArticleController {
       return;
     }
 
-    Map<String, String> params = rq.getParams();
+    int id = rq.getIntParam("id", 0);
 
-    if (!params.containsKey("id")) {
-      System.out.println("id 값을 입력해주세요.");
-      return;
-    }
-
-    int id = 0;
-
-    try {
-      id = Integer.parseInt(params.get("id"));
-    } catch (NumberFormatException e) {
-      System.out.println("id를 정수형태로 입력해주세요.");
+    if (id == 0) {
+      System.out.println("올바른 값을 입력해주세요.");
       return;
     }
 
     Article article = findById(id);
 
-    if(article == null) {
+    if (article == null) {
       System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
       return;
     }
