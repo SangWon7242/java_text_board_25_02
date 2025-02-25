@@ -49,7 +49,7 @@ public class ArticleRepository {
 
       articles.stream()
           .filter(article
-              -> article.subject.contains(searchKeyword) || article.content.contains(searchKeyword)
+              -> article.getSubject().contains(searchKeyword) || article.getContent().contains(searchKeyword)
           )
           .forEach(filteredArticles::add);
     }
@@ -59,7 +59,7 @@ public class ArticleRepository {
 
   public Article findById(int id) {
     return articles.stream()
-        .filter(article -> article.id == id)
+        .filter(article -> article.getId() == id)
         .findFirst() // 찾은 것중에 처음 것을 리턴
         .orElse(null); // 찾지 못했다면 null을 리턴
   }
@@ -71,8 +71,8 @@ public class ArticleRepository {
       return;
     }
 
-    article.subject = subject;
-    article.content = content;
+    article.setSubject(subject);
+    article.setContent(content);
   }
 
   public void delete(int id) {
