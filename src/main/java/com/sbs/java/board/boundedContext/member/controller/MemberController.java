@@ -8,11 +8,9 @@ import com.sbs.java.board.session.Session;
 
 public class MemberController {
   private MemberService memberService;
-  private Session session;
 
   public MemberController() {
     memberService = Container.memberService;
-    session = Container.session;
   }
 
   public void doJoin(Rq rq) {
@@ -98,7 +96,7 @@ public class MemberController {
     String password;
     Member member;
 
-    if(session.hasAttribute("loginedMember")) {
+    if(rq.isLogined()) {
       System.out.println("로그아웃 후 이용해주세요.");
       return;
     }
@@ -155,8 +153,19 @@ public class MemberController {
     }
     
     // 로그인 정보를 세션에 저장
-    session.setAttribute("loginedMember", member);
+    rq.setSessionAttr("loginedMember", member);
 
     System.out.printf("\"%s\"님 환영합니다.\n", username);
+  }
+
+  public void doLogout(Rq rq) {
+    if(rq.isLogout()) {
+      System.out.println("로그인 후 이용해주세요.");
+      return;
+    }
+
+    rq.removeSessionAttr("loginedMember");
+
+    System.out.println("로그아웃 되었습니다.");
   }
 }
