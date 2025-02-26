@@ -168,4 +168,18 @@ public class MemberController {
 
     System.out.println("로그아웃 되었습니다.");
   }
+
+  public void showMyPage(Rq rq) {
+    if(rq.isLogout()) {
+      System.out.println("로그인 후 이용해주세요.");
+      return;
+    }
+
+    Member member = (Member) rq.getSessionAttr("loginedMember");
+
+    System.out.printf("== \"%s\" 님 회원정보 ==\n", member.getUsername());
+    System.out.printf("아이디 : %s\n", member.getUsername());
+    System.out.println("비밀번호 : *****");
+    System.out.printf("이름 : %s\n", member.getName());
+  }
 }
