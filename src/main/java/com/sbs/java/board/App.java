@@ -5,7 +5,10 @@ import com.sbs.java.board.boundedContext.article.controller.ArticleController;
 import com.sbs.java.board.boundedContext.member.controller.MemberController;
 import com.sbs.java.board.boundedContext.member.dto.Member;
 import com.sbs.java.board.container.Container;
-import com.sbs.java.board.session.Session;
+import com.sbs.java.board.interceptor.Interceptor;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class App {
   public MemberController memberController;
@@ -25,7 +28,7 @@ public class App {
       Member member = (Member) rq.getSessionAttr("loginedMember");
       String promptName = "명령";
 
-      if(member != null) {
+      if (member != null) {
         promptName = member.getUsername();
       }
 
@@ -33,6 +36,10 @@ public class App {
       String cmd = Container.sc.nextLine();
 
       rq.setCommand(cmd);
+
+      if (!runInterceptor(rq)) {
+        continue;
+      }
 
       if (rq.getUrlPath().equals("/usr/article/write")) {
         articleController.doWrite();
@@ -62,5 +69,20 @@ public class App {
 
     System.out.println("== 자바 텍스트 게시판 끝 ==");
     Container.sc.close();
+  }
+
+  private boolean runInterceptor(Rq rq) {
+    List<Interceptor> interceptors = new ArrayList<>();
+
+    interceptors.add(Container.needLogoutInterceptor);
+    interceptors.add(Container.needLoginInterceptor);
+
+    for (Interceptor interceptor : interceptors) {
+      if (!interceptor.run(rq)) {
+        return false;
+      }
+    }
+
+    return true;
   }
 }

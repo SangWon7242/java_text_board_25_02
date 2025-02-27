@@ -96,11 +96,6 @@ public class MemberController {
     String password;
     Member member;
 
-    if(rq.isLogined()) {
-      System.out.println("로그아웃 후 이용해주세요.");
-      return;
-    }
-
     System.out.println("== 로그인 ==");
 
     // 로그인 아이디 입력
@@ -159,22 +154,12 @@ public class MemberController {
   }
 
   public void doLogout(Rq rq) {
-    if(rq.isLogout()) {
-      System.out.println("로그인 후 이용해주세요.");
-      return;
-    }
-
     rq.removeSessionAttr("loginedMember");
 
     System.out.println("로그아웃 되었습니다.");
   }
 
   public void showMyPage(Rq rq) {
-    if(rq.isLogout()) {
-      System.out.println("로그인 후 이용해주세요.");
-      return;
-    }
-
     Member member = (Member) rq.getSessionAttr("loginedMember");
 
     System.out.printf("== \"%s\" 님 회원정보 ==\n", member.getUsername());
