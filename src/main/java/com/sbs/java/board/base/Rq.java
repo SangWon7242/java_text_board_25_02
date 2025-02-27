@@ -1,5 +1,6 @@
 package com.sbs.java.board.base;
 
+import com.sbs.java.board.boundedContext.member.dto.Member;
 import com.sbs.java.board.container.Container;
 import com.sbs.java.board.session.Session;
 import com.sbs.java.board.util.Util;
@@ -52,6 +53,14 @@ public class Rq {
     return !isLogined();
   }
 
+  public void login(Member member) {
+    setSessionAttr(loginedMember, member);
+  }
+
+  public void logout(Member member) {
+    removeSessionAttr(loginedMember);
+  }
+
   public String getParam(String paramName, String defaultValue) {
     if (!params.containsKey(paramName)) return defaultValue;
 
@@ -72,6 +81,10 @@ public class Rq {
 
   public boolean hasSessionAttr(String attrName) {
     return session.hasAttribute(attrName);
+  }
+
+  public Member getLoginedMember() {
+    return (Member) getSessionAttr(loginedMember);
   }
 }
 

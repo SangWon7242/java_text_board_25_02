@@ -28,4 +28,11 @@ public class MemberRepository {
         .findFirst() // 찾은 것중에 처음 것을 리턴
         .orElse(null); // 찾지 못했다면 null을 리턴
   }
+
+  public Member findById(int id) {
+    return members.stream()
+        .filter(member -> member.getId() == id)
+        .findFirst()
+        .orElse(null);
+  }
 }
