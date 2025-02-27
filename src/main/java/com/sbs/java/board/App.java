@@ -42,7 +42,7 @@ public class App {
       }
 
       if (rq.getUrlPath().equals("/usr/article/write")) {
-        articleController.doWrite();
+        articleController.doWrite(rq);
       } else if (rq.getUrlPath().equals("/usr/article/list")) {
         articleController.showList(rq);
       } else if (rq.getUrlPath().equals("/usr/article/detail")) {

@@ -18,11 +18,11 @@ public class ArticleService {
 
   public void makeArticleTestData() {
     IntStream.rangeClosed(1, 100)
-        .forEach(i -> write("제목" + i, "내용" + i));
+        .forEach(i -> write("제목" + i, "내용" + i, "익명"));
   }
 
-  public int write(String subject, String content) {
-    return articleRepository.write(subject, content);
+  public int write(String subject, String content, String writerName) {
+    return articleRepository.write(subject, content, writerName);
   }
 
   public List<Article> findAll(String searchKeyword, String orderBy) {
