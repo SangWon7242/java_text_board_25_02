@@ -81,9 +81,15 @@ public class ArticleController {
     }
 
     Article article = articleService.findById(id);
+    Member member = (Member) rq.getSessionAttr("loginedMember");
 
     if (article == null) {
       System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
+      return;
+    }
+
+    if(!article.getWriterName().equals(member.getUsername())) {
+      System.out.println("게시물에 접근 권한이 없습니다.");
       return;
     }
 
@@ -108,9 +114,15 @@ public class ArticleController {
     }
 
     Article article = articleService.findById(id);
+    Member member = (Member) rq.getSessionAttr("loginedMember");
 
     if (article == null) {
       System.out.printf("%d번 게시물은 존재하지 않습니다.\n", id);
+      return;
+    }
+
+    if(!article.getWriterName().equals(member.getUsername())) {
+      System.out.println("게시물에 접근 권한이 없습니다.");
       return;
     }
 
