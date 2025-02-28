@@ -8,6 +8,8 @@ import lombok.*;
 @ToString
 public class Member {
   private final int id;
+  private String regDate;
+  private String updateDate;
   private final String username;
   private String password;
   private String name;

@@ -8,6 +8,8 @@ import lombok.*;
 @ToString
 public class Article {
   private final int id;
+  private String regDate;
+  private String updateDate;
   private String subject;
   private String content;
   private String writerName; // 작성자명
