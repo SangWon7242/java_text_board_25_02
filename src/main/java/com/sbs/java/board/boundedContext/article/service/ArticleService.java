@@ -17,8 +17,8 @@ public class ArticleService {
     return articleRepository.write(subject, content, writerName, memberId, boardId);
   }
 
-  public List<Article> findAll(String searchKeyword, String orderBy, int boardId) {
-    return articleRepository.findAll(searchKeyword, orderBy, boardId);
+  public List<Article> findAll(String searchKeyword, String searchKeywordTypeCode, String orderBy, int boardId) {
+    return articleRepository.findAll(searchKeyword, searchKeywordTypeCode, orderBy, boardId);
   }
 
   public Article findById(int id) {

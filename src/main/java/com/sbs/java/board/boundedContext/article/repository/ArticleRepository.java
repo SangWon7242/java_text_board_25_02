@@ -20,7 +20,7 @@ public class ArticleRepository {
 
   public void makeArticleTestData() {
     IntStream.rangeClosed(1, 100)
-        .forEach(i -> write("제목" + i, "내용" + i, "홍길동", 1, (int)(Math.random() * 2) + 1));
+        .forEach(i -> write("제목" + i, "내용" + i, "홍길동", 1, (int) (Math.random() * 2) + 1));
   }
 
   public int write(String subject, String content, String writerName, int memberId, int boardId) {
@@ -49,30 +49,34 @@ public class ArticleRepository {
 
     return sortedArticles;
   }
-  
+
   // 전체 게시물 리스트 가져오는 리스트
-  public List<Article> findAll(String searchKeyword, String orderBy, int boardId) {
+  public List<Article> findAll(String searchKeyword, String searchKeywordTypeCode, String orderBy, int boardId) {
     List<Article> filteredArticles = findByOrderByIdDesc(orderBy);
 
-    if(boardId == 0) {
-      return filteredArticles;
-    }
-    
     // boardId에 맞는 게시물 필터링
-    if(boardId > 0) {
+    if (boardId > 0) {
       return filteredArticles.stream()
           .filter(article -> article.getBoardId() == boardId).toList();
     }
 
     if (!searchKeyword.trim().isEmpty()) {
+      List<Article> sortedArticles = findByOrderByIdDesc(orderBy);
 
-      filteredArticles = new ArrayList<>();
-
-      articles.stream()
+      filteredArticles = sortedArticles.stream()
           .filter(article
-              -> article.getSubject().contains(searchKeyword) || article.getContent().contains(searchKeyword)
-          )
-          .forEach(filteredArticles::add);
+                  -> switch (searchKeywordTypeCode) {
+                // 제목검색
+                case "subject" -> article.getSubject().contains(searchKeyword);
+                // 내용검색
+                case "content" -> article.getContent().contains(searchKeyword);
+                // 제목, 내용 검색
+                case "subject,content" ->
+                    article.getSubject().contains(searchKeyword) || article.getContent().contains(searchKeyword);
+                
+                default -> true; // 검색 유형이 없으면 필터링 x
+              }
+          ).toList();
     }
 
     return filteredArticles;
@@ -88,7 +92,7 @@ public class ArticleRepository {
   public void modify(int id, String subject, String content) {
     Article article = findById(id);
 
-    if(article == null) {
+    if (article == null) {
       return;
     }
 
@@ -99,7 +103,7 @@ public class ArticleRepository {
   public void delete(int id) {
     Article article = findById(id);
 
-    if(article == null) {
+    if (article == null) {
       return;
     }
 
