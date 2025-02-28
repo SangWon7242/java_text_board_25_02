@@ -16,6 +16,13 @@ public class ArticleController {
   }
 
   public void doWrite(Rq rq) {
+    int boardId = rq.getIntParam("boardId", 0);
+
+    if(boardId == 0) {
+      System.out.println("올바른 값을 입력해주세요.");
+      return;
+    }
+
     System.out.println("== 게시물 작성 ==");
 
     System.out.print("제목 : ");
@@ -26,7 +33,7 @@ public class ArticleController {
 
     Member member = (Member) rq.getSessionAttr("loginedMember");
 
-    int id = articleService.write(subject, content, member.getUsername(), member.getId());
+    int id = articleService.write(subject, content, member.getUsername(), member.getId(), boardId);
 
     System.out.printf("%d번 게시물이 등록되었습니다.\n", id);
   }
@@ -43,10 +50,10 @@ public class ArticleController {
     }
 
     System.out.printf("== 게시물 리스트(%d개) ==\n", articles.size());
-    System.out.println("번호 | 제목 | 작성자");
+    System.out.println("번호 | 제목 | 작성자 | 게시판 번호");
     articles.forEach(
-        article -> System.out.printf("%d | %s | %s\n",
-            article.getId(), article.getSubject(), article.getWriterName())
+        article -> System.out.printf("%d | %s | %s | %d\n",
+            article.getId(), article.getSubject(), article.getWriterName(), article.getBoardId())
     );
   }
 

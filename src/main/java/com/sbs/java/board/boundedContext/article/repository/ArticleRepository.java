@@ -1,7 +1,6 @@
 package com.sbs.java.board.boundedContext.article.repository;
 
 import com.sbs.java.board.boundedContext.article.dto.Article;
-import com.sbs.java.board.boundedContext.member.dto.Member;
 import com.sbs.java.board.util.Util;
 
 import java.util.ArrayList;
@@ -21,13 +20,13 @@ public class ArticleRepository {
 
   public void makeArticleTestData() {
     IntStream.rangeClosed(1, 100)
-        .forEach(i -> write("제목" + i, "내용" + i, "홍길동", 1));
+        .forEach(i -> write("제목" + i, "내용" + i, "홍길동", 1, (int)(Math.random() * 2) + 1));
   }
 
-  public int write(String subject, String content, String writerName, int memberId) {
+  public int write(String subject, String content, String writerName, int memberId, int boardId) {
     int id = ++lastId;
 
-    Article article = new Article(id, subject, content, writerName, memberId);
+    Article article = new Article(id, subject, content, writerName, memberId, boardId);
     articles.add(article);
 
     return id;
