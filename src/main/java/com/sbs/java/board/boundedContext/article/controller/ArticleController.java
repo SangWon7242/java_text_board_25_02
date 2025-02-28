@@ -47,19 +47,22 @@ public class ArticleController {
   public void showList(Rq rq) {
     String searchKeyword = rq.getParam("searchKeyword", "");
     String orderBy = rq.getParam("orderBy", "idDesc");
+    int boardId  = rq.getIntParam("boardId", 1);
 
-    List<Article> articles = articleService.findAll(searchKeyword, orderBy);
+    List<Article> articles = articleService.findAll(searchKeyword, orderBy, boardId);
 
     if (articles.isEmpty()) {
       System.out.println("현재 게시물이 존재하지 않습니다.");
       return;
     }
 
-    System.out.printf("== 게시물 리스트(%d개) ==\n", articles.size());
-    System.out.println("번호 | 제목 | 작성자 | 게시판 이름");
+    Board board = boardService.findByBoardId(boardId);
+
+    System.out.printf("== %s 게시물 리스트(%d개) ==\n", board.getName(), articles.size());
+    System.out.println("번호 | 제목 | 작성자");
     articles.forEach(
-        article -> System.out.printf("%d | %s | %s | %d\n",
-            article.getId(), article.getSubject(), article.getWriterName(), article.getBoardId())
+        article -> System.out.printf("%d | %s | %s\n",
+            article.getId(), article.getSubject(), article.getWriterName())
     );
   }
 

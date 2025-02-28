@@ -33,7 +33,7 @@ public class ArticleRepository {
   }
 
   // 정렬 게시물 리스트
-  public List<Article> findAll(String orderBy) {
+  public List<Article> findByBoardIdOrderByIdDesc(String orderBy, int boardId) {
     List<Article> sortedArticles = articles;
 
     if (orderBy.equals("idAsc")) {
@@ -44,12 +44,13 @@ public class ArticleRepository {
       sortedArticles = Util.reverseList(articles);
     }
 
-    return sortedArticles;
+    return sortedArticles.stream()
+        .filter(article -> article.getBoardId() == boardId).toList();
   }
   
   // 전체 게시물 리스트 가져오는 리스트
-  public List<Article> findAll(String searchKeyword, String orderBy) {
-    List<Article> filteredArticles = findAll(orderBy);
+  public List<Article> findAll(String searchKeyword, String orderBy, int boardId) {
+    List<Article> filteredArticles = findByBoardIdOrderByIdDesc(orderBy, boardId);
 
     if (!searchKeyword.trim().isEmpty()) {
 
