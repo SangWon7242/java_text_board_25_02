@@ -47,7 +47,18 @@ public class ArticleController {
   public void showList(Rq rq) {
     String searchKeyword = rq.getParam("searchKeyword", "");
     String orderBy = rq.getParam("orderBy", "idDesc");
-    int boardId  = rq.getIntParam("boardId", 1);
+    int boardId  = rq.getIntParam("boardId", 0);
+
+    Board board = null;
+
+    if(boardId != 0) {
+      board = boardService.findByBoardId(boardId);
+    }
+
+    if(board == null && boardId > 0) {
+      System.out.println("해당 게시판은 존재하지 않습니다.");
+      return;
+    }
 
     List<Article> articles = articleService.findAll(searchKeyword, orderBy, boardId);
 
@@ -56,9 +67,9 @@ public class ArticleController {
       return;
     }
 
-    Board board = boardService.findByBoardId(boardId);
+    String boardName = board == null ? "전체" : board.getName();
 
-    System.out.printf("== %s 게시물 리스트(%d개) ==\n", board.getName(), articles.size());
+    System.out.printf("== %s 게시물 리스트(%d개) ==\n", boardName, articles.size());
     System.out.println("번호 | 제목 | 작성자");
     articles.forEach(
         article -> System.out.printf("%d | %s | %s\n",
