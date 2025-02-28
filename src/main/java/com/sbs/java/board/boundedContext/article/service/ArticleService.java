@@ -2,6 +2,7 @@ package com.sbs.java.board.boundedContext.article.service;
 
 import com.sbs.java.board.boundedContext.article.dto.Article;
 import com.sbs.java.board.boundedContext.article.repository.ArticleRepository;
+import com.sbs.java.board.boundedContext.member.dto.Member;
 import com.sbs.java.board.container.Container;
 
 import java.util.List;
@@ -12,17 +13,10 @@ public class ArticleService {
 
   public ArticleService() {
     articleRepository = Container.articleRepository;
-
-    makeArticleTestData();
   }
 
-  public void makeArticleTestData() {
-    IntStream.rangeClosed(1, 100)
-        .forEach(i -> write("제목" + i, "내용" + i, "익명"));
-  }
-
-  public int write(String subject, String content, String writerName) {
-    return articleRepository.write(subject, content, writerName);
+  public int write(String subject, String content, String writerName, int memberId) {
+    return articleRepository.write(subject, content, writerName, memberId);
   }
 
   public List<Article> findAll(String searchKeyword, String orderBy) {

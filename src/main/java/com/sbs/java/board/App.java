@@ -35,7 +35,6 @@ public class App {
         promptName = member.getUsername();
       }
 
-
       System.out.printf("%s) ", promptName);
       String cmd = Container.sc.nextLine();
 

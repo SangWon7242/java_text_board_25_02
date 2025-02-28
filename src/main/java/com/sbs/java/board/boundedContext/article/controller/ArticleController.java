@@ -26,7 +26,7 @@ public class ArticleController {
 
     Member member = (Member) rq.getSessionAttr("loginedMember");
 
-    int id = articleService.write(subject, content, member.getUsername());
+    int id = articleService.write(subject, content, member.getUsername(), member.getId());
 
     System.out.printf("%d번 게시물이 등록되었습니다.\n", id);
   }
@@ -88,7 +88,7 @@ public class ArticleController {
       return;
     }
 
-    if(!article.getWriterName().equals(member.getUsername())) {
+    if(!(article.getMemberId() == member.getId())) {
       System.out.println("게시물에 접근 권한이 없습니다.");
       return;
     }
@@ -121,7 +121,7 @@ public class ArticleController {
       return;
     }
 
-    if(!article.getWriterName().equals(member.getUsername())) {
+    if(!(article.getMemberId() == member.getId())) {
       System.out.println("게시물에 접근 권한이 없습니다.");
       return;
     }
